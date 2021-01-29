@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <!--Patryk Najda index:9631, technologie: HTML,CSS,JavaScript ES6
+    Jednokierunkowa funkcja skrótu-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>1KierunkowaFunkcjaSkrotu</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+        <style>
+            header {
+                text-align: center;
+                font-family: monospace;
+                color:#000080;
+                font-size:40px;
+                margin-top:3vh;
+                margin-bottom:10vh;
+            }
+            section {
+                width:50%;
+                height:8vh;
+                margin-left: auto;
+                margin-right: auto;
+                border:5px dotted #ff0000;
+                border-radius: 10px;
+                text-align: center;
+            }
+            section > #klucz {
+                text-align: center;
+                width:50%;
+                height:100%;
+                font-family: monospace;
+                color:#000080;
+                float:left;
+                font-size: 20px;
+            }
+            section > #key {
+                float:left;
+                width:40%;
+                text-align: center;
+                color:#000080;
+                line-height: 8vh;
+                height:100%;
+                font-family: monospace;
+                font-size: 22px;
+            }
+            .buttonZone {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top:7vh;
+                width:14%;
+            }
+
+            .buttonZone > #messageButton {
+                background-color: aquamarine;
+                columns: #000080;
+                font-size:18px;
+                padding:10px;
+                line-height: 5vh;
+                border:none;
+                cursor: pointer;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius:15px;
+            }
+
+            #messageButton:link {
+                border:none;
+            }
+
+            #messageButton:visited {
+                border:none;
+            }
+
+            input[type="button" i] {
+                align-items: center;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            #message {
+                font-size:28px;
+                color: blue;
+                font-family: monospace;
+                margin-left: auto;
+                margin-right: auto;
+                margin:5vh;
+                text-align: center;
+                align-items:center;
+                height:7vh;
+            }
+
+            #takeBackTheKey {
+                font-size: 26px;
+                color:rebeccapurple;
+                font-family: monospace;
+                width:40%;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                align-items: center;
+                height:7vh;
+            }
+
+            footer {
+                margin-top:30vh;
+                font-family: 'Montserrat', sans-serif;
+                text-align: center;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>1KierunkowaFunkcjaSkrotu</header>
+        <section>
+            <div id="klucz">
+                <p>Klucz: </p>
+            </div>
+            <div id="key"></div>
+            <div style="clear:both;"></div>
+        </section>
+        <div class="buttonZone">
+            <input type="button" id="messageButton" value="Wprowadz wiadomość">
+        </div>
+
+        <div id="message"></div>
+
+        <div id="takeBackTheKey"></div>
+
+        <footer>2021 created by Patryk Najda</footer>
+        <script>
+            //pobieranie elementów DOM z dokumentu HTML
+            const requestK = prompt("Podaj długość klucza w liczbach całkowitych: ")
+            const key = document.getElementById('key')
+            key.innerHTML = requestK //wypisanie w HTML podaną długość klucza
+
+            const messageButton = document.getElementById('messageButton')
+            const message = document.getElementById('message')
+
+            messageButton.addEventListener('click', () => { //uzależnienie działania od wciśnięcia przycisku
+                let prompt2 = prompt("Podaj wiadomość do operacji (nie krótszą niż wskazuje klucz!): ", "Example_message_sir")//implementacja prompta do wpisania wiadomości
+                let promptLower = prompt2.toLowerCase()//zmiejszenie liter
+                if(prompt2.length < parseInt(requestK)) {
+                    message.innerHTML = "Długość wiadomości nie może być krótsza od długości klucza!" //klucz dluzszy od wiadomości? nie ma sensu działać
+                }
+                else {
+                    var wiadomosc = "" //pusty string do którego damy wiadomość, ale bez spacji
+                    for(let i=0; i<promptLower.length; i++) {
+                        if(promptLower[i] == " ") {
+                            continue //eliminacja spacji
+                        }
+                        wiadomosc += promptLower[i] //dodawanie znakow wiadomosci do stringa
+                    }
+                    message.innerHTML = wiadomosc //wypisanie wiadomosci
+
+                    let generatka = "" //łańcuch znaków dla powstałego szyfrogramu [nie będzie widoczny w widoku, służy do dalszych operacji]
+                    let valueAsciiGroup = 0 //konwersja znaków szyfrogramu na kod ascii, po czym beda one odpowiednio dodawane
+                    let arrayOutcomes = [] //aby podzielić odpowiednio, zastosowałem tablicę
+                    for(let a=0; a<wiadomosc.length; a++) {
+                        if(a%requestK == 0) {
+                            generatka += wiadomosc[a] //dodawanie do szyfrogramu, o ile miejsce znaku jest podzielne przez klucz
+                        }
+                    }
+
+                    for(let b=1; b<requestK; b++) {
+                        for(let c=1; c<wiadomosc.length; c++) {
+                            if(c%requestK == b) {
+                                generatka += wiadomosc[c] //dodawanie do szyforgramu dla reszt [oprócz zera]
+                            }
+                        }  
+                    }    
+
+                    //pobieranie z powstałego szyfrogramu kodów ASCII
+                    //na podobnej zasadzie zadziała selekcja znaków na grupy [kolumny]
+                    for(let i=0; i<requestK; i++) {
+                        valueAsciiGroup = 0 //zerowanie sumy ascii
+                        for(let j=0; j<wiadomosc.length; j++) {
+                            if(j%requestK == i) {
+                               valueAsciiGroup += wiadomosc.charCodeAt(j) //odpowiednie dodawanie
+                            }
+                        }
+                        arrayOutcomes.push(valueAsciiGroup)  //gdy dojdzie że i == requestK [zajdzie podzielnosc] kończymy dodawanie, dodajemy wynik do tablicy
+                    }    
+                    //console.log(arrayOutcomes)
+
+                    //obliczanie kodu ascii już dla klucza skrótu
+                    let skrot = "" //przygotowanie pustego łańcucha znaków dla klucza skrótu
+
+                    arrayOutcomes.forEach((item) => { //dla każdego elementu wcześniej wspomnianej tablicy....
+                        let wynik_Cipher = (item%26)+97 //obliczamy wynik na podstawie Pana wzoru
+                        //console.log(wynik_Cipher)
+                        let sign = String.fromCharCode(wynik_Cipher) //mając wyniki poszczególne, dla nich przypisujemy znak
+                        skrot += sign //ten każdy znak kolejno dodajemy do łańcucha znaków
+                    })
+
+                    //console.log("Klucz: " + skrot)
+                    let KeyKeyKey = document.getElementById('takeBackTheKey') //zmienna służąca do pobrania DOM w celu wyświetlenia wyniku na widoku
+                    KeyKeyKey.innerHTML = "Skrót: " + skrot //wypisanie :3  .... działa!!!
+
+                }
+            })
+        </script>
+    </body>
+</html>
